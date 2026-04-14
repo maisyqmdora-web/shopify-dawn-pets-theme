@@ -22,7 +22,9 @@
             "text": "One-stop shop for pet food, toys, and care. Love every little animal.",
             "button_label": "Shop Now",
             "button_link": "shopify://collections/all",
-            "button_style_secondary": true
+            "button_style_secondary": true,
+            "content_position": "top-right",
+            "content_alignment": "right"
           }
         },
         "slide_2": {
@@ -35,7 +37,9 @@
             "text": "Check out the latest toys, treats and accessories for your furry friends.",
             "button_label": "Explore",
             "button_link": "shopify://collections/all",
-            "button_style_secondary": true
+            "button_style_secondary": true,
+            "content_position": "middle-left",
+            "content_alignment": "left"
           }
         },
         "slide_3": {
@@ -48,7 +52,9 @@
             "text": "We deliver love to your doorstep. Shop now and save more.",
             "button_label": "Learn More",
             "button_link": "shopify://collections/all",
-            "button_style_secondary": true
+            "button_style_secondary": true,
+            "content_position": "bottom-right",
+            "content_alignment": "right"
           }
         }
       },
@@ -59,11 +65,11 @@
         "image_behavior": "none",
         "auto_rotate": false,
         "change_slides_speed": 5,
-        "desktop_content_position": "bottom-center",
-        "desktop_content_alignment": "center",
+        "desktop_content_position": "top-right",
+        "desktop_content_alignment": "right",
         "show_text_box": false,
         "mobile_content_alignment": "center",
-        "show_text_below": false
+        "show_text_below": true
       }
     },
     "rich_text": {

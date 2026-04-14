@@ -123,6 +123,78 @@
         #Slide-{{ section.id }}-{{ forloop.index }} .banner__media::after {
           opacity: {{ section.settings.image_overlay_opacity | divided_by: 100.0 }};
         }
+        {%- if block.settings.heading_font_size != blank and block.settings.heading_font_size > 0 -%}
+          #Slide-{{ section.id }}-{{ forloop.index }} .banner__heading {
+            font-size: {{ block.settings.heading_font_size }}px;
+          }
+        {%- endif -%}
+        {%- if block.settings.text_font_size != blank and block.settings.text_font_size > 0 -%}
+          #Slide-{{ section.id }}-{{ forloop.index }} .banner__text p {
+            font-size: {{ block.settings.text_font_size }}px;
+          }
+        {%- endif -%}
+        {%- if block.settings.heading_color != blank -%}
+          #Slide-{{ section.id }}-{{ forloop.index }} .banner__heading {
+            color: {{ block.settings.heading_color }};
+          }
+        {%- endif -%}
+        {%- if block.settings.text_color != blank -%}
+          #Slide-{{ section.id }}-{{ forloop.index }} .banner__text,
+          #Slide-{{ section.id }}-{{ forloop.index }} .banner__text p {
+            color: {{ block.settings.text_color }};
+          }
+        {%- endif -%}
+        {%- liquid
+          assign heading_font_css = ''
+          case block.settings.heading_font_family
+            when 'luckiest_guy'
+              assign heading_font_css = 'Luckiest Guy, cursive'
+            when 'nunito'
+              assign heading_font_css = 'Nunito, sans-serif'
+            when 'system_sans'
+              assign heading_font_css = '-apple-system, BlinkMacSystemFont, Segoe UI, sans-serif'
+            when 'serif'
+              assign heading_font_css = 'Georgia, Times New Roman, serif'
+          endcase
+
+          assign text_font_css = ''
+          case block.settings.text_font_family
+            when 'luckiest_guy'
+              assign text_font_css = 'Luckiest Guy, cursive'
+            when 'nunito'
+              assign text_font_css = 'Nunito, sans-serif'
+            when 'system_sans'
+              assign text_font_css = '-apple-system, BlinkMacSystemFont, Segoe UI, sans-serif'
+            when 'serif'
+              assign text_font_css = 'Georgia, Times New Roman, serif'
+          endcase
+        -%}
+        {%- if heading_font_css != '' -%}
+          #Slide-{{ section.id }}-{{ forloop.index }} .banner__heading {
+            font-family: {{ heading_font_css }};
+          }
+        {%- endif -%}
+        {%- if text_font_css != '' -%}
+          #Slide-{{ section.id }}-{{ forloop.index }} .banner__text,
+          #Slide-{{ section.id }}-{{ forloop.index }} .banner__text p {
+            font-family: {{ text_font_css }};
+          }
+        {%- endif -%}
+        {%- if block.settings.button_text_color != blank -%}
+          #Slide-{{ section.id }}-{{ forloop.index }} .banner__buttons .button {
+            color: {{ block.settings.button_text_color }};
+          }
+        {%- endif -%}
+        {%- if block.settings.button_border_color != blank -%}
+          #Slide-{{ section.id }}-{{ forloop.index }} .banner__buttons .button {
+            border-color: {{ block.settings.button_border_color }};
+          }
+        {%- endif -%}
+        {%- if block.settings.button_bg_color != blank -%}
+          #Slide-{{ section.id }}-{{ forloop.index }} .banner__buttons .button {
+            background-color: {{ block.settings.button_bg_color }};
+          }
+        {%- endif -%}
       </style>
       <div
         class="slideshow__slide grid__item grid--1-col slider__slide"
@@ -196,8 +268,20 @@
           </div>
         {%- endif -%}
 
-        <div class="slideshow__text-wrapper banner__content banner__content--{{ section.settings.desktop_content_position }} page-width{% if section.settings.show_text_box == false %} banner--desktop-transparent{% endif %}{% if settings.animations_reveal_on_scroll and forloop.index == 1 %} scroll-trigger animate--slide-in{% endif %}">
-          <div class="slideshow__text banner__box content-container content-container--full-width-mobile color-{{ block.settings.color_scheme }} gradient banner--content-align-{{ section.settings.desktop_content_alignment }} banner--content-align-mobile-{{ section.settings.mobile_content_alignment }}">
+        {%- liquid
+          if block.settings.content_position != blank
+            assign slide_position = block.settings.content_position
+          else
+            assign slide_position = section.settings.desktop_content_position
+          endif
+          if block.settings.content_alignment != blank
+            assign slide_alignment = block.settings.content_alignment
+          else
+            assign slide_alignment = section.settings.desktop_content_alignment
+          endif
+        -%}
+        <div class="slideshow__text-wrapper banner__content banner__content--{{ slide_position }} page-width{% if section.settings.show_text_box == false %} banner--desktop-transparent{% endif %}{% if settings.animations_reveal_on_scroll and forloop.index == 1 %} scroll-trigger animate--slide-in{% endif %}">
+          <div class="slideshow__text banner__box content-container content-container--full-width-mobile color-{{ block.settings.color_scheme }} gradient banner--content-align-{{ slide_alignment }} banner--content-align-mobile-{{ section.settings.mobile_content_alignment }}">
             {%- if block.settings.heading != blank -%}
               <h2 class="banner__heading banner__heading--artistic inline-richtext {{ block.settings.heading_size }}">
                 {{ block.settings.heading }}
@@ -546,6 +630,115 @@
           "id": "button_style_secondary",
           "default": true,
           "label": "Use outline button style"
+        },
+        {
+          "type": "select",
+          "id": "content_position",
+          "options": [
+            { "value": "", "label": "Inherit from section" },
+            { "value": "top-left", "label": "Top left" },
+            { "value": "top-center", "label": "Top center" },
+            { "value": "top-right", "label": "Top right" },
+            { "value": "middle-left", "label": "Middle left" },
+            { "value": "middle-center", "label": "Middle center" },
+            { "value": "middle-right", "label": "Middle right" },
+            { "value": "bottom-left", "label": "Bottom left" },
+            { "value": "bottom-center", "label": "Bottom center" },
+            { "value": "bottom-right", "label": "Bottom right" }
+          ],
+          "default": "",
+          "label": "Content position (per slide)"
+        },
+        {
+          "type": "select",
+          "id": "content_alignment",
+          "options": [
+            { "value": "", "label": "Inherit from section" },
+            { "value": "left", "label": "Left" },
+            { "value": "center", "label": "Center" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "",
+          "label": "Content alignment (per slide)"
+        },
+        {
+          "type": "range",
+          "id": "heading_font_size",
+          "min": 0,
+          "max": 100,
+          "step": 2,
+          "unit": "px",
+          "default": 0,
+          "label": "Heading font size (0 = default)"
+        },
+        {
+          "type": "range",
+          "id": "text_font_size",
+          "min": 0,
+          "max": 60,
+          "step": 1,
+          "unit": "px",
+          "default": 0,
+          "label": "Text font size (0 = default)"
+        },
+        {
+          "type": "header",
+          "content": "Text color & font"
+        },
+        {
+          "type": "color",
+          "id": "heading_color",
+          "label": "Heading color"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color"
+        },
+        {
+          "type": "select",
+          "id": "heading_font_family",
+          "options": [
+            { "value": "", "label": "Inherit default" },
+            { "value": "luckiest_guy", "label": "Luckiest Guy" },
+            { "value": "nunito", "label": "Nunito" },
+            { "value": "system_sans", "label": "System Sans" },
+            { "value": "serif", "label": "Serif" }
+          ],
+          "default": "",
+          "label": "Heading font family"
+        },
+        {
+          "type": "select",
+          "id": "text_font_family",
+          "options": [
+            { "value": "", "label": "Inherit default" },
+            { "value": "luckiest_guy", "label": "Luckiest Guy" },
+            { "value": "nunito", "label": "Nunito" },
+            { "value": "system_sans", "label": "System Sans" },
+            { "value": "serif", "label": "Serif" }
+          ],
+          "default": "",
+          "label": "Text font family"
+        },
+        {
+          "type": "header",
+          "content": "Button style"
+        },
+        {
+          "type": "color",
+          "id": "button_text_color",
+          "label": "Button text color"
+        },
+        {
+          "type": "color",
+          "id": "button_border_color",
+          "label": "Button border color"
+        },
+        {
+          "type": "color",
+          "id": "button_bg_color",
+          "label": "Button background color"
         }
       ]
     }
