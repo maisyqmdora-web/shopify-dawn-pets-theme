@@ -12,6 +12,30 @@
     "image_banner": {
       "type": "image-banner",
       "blocks": {
+        "slide_hgkLWY": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/business-pug-working-on-laptop.jpg",
+            "color_scheme": "scheme-3",
+            "heading": "Give the best for your pets",
+            "heading_size": "h0",
+            "text": "Describe the slide content here.",
+            "button_label": "Shop Now",
+            "button_link": "",
+            "button_style_secondary": true,
+            "content_position": "middle-left",
+            "content_alignment": "",
+            "heading_font_size": 50,
+            "text_font_size": 30,
+            "heading_color": "",
+            "text_color": "",
+            "heading_font_family": "",
+            "text_font_family": "",
+            "button_text_color": "#aa6699",
+            "button_border_color": "",
+            "button_bg_color": ""
+          }
+        },
         "slide_bWNCzN": {
           "type": "slide",
           "settings": {
@@ -59,36 +83,12 @@
             "button_border_color": "",
             "button_bg_color": ""
           }
-        },
-        "slide_2": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/tabby-cat-lounging-around.jpg",
-            "color_scheme": "scheme-3",
-            "heading": "New Arrivals This Season",
-            "heading_size": "h0",
-            "text": "Check out the latest toys, treats and accessories for your furry friends.",
-            "button_label": "Explore",
-            "button_link": "shopify://collections/all",
-            "button_style_secondary": true,
-            "content_position": "top-center",
-            "content_alignment": "left",
-            "heading_font_size": 50,
-            "text_font_size": 30,
-            "heading_color": "",
-            "text_color": "",
-            "heading_font_family": "",
-            "text_font_family": "",
-            "button_text_color": "",
-            "button_border_color": "",
-            "button_bg_color": ""
-          }
         }
       },
       "block_order": [
+        "slide_hgkLWY",
         "slide_bWNCzN",
-        "slide_1",
-        "slide_2"
+        "slide_1"
       ],
       "settings": {
         "image_overlay_opacity": 0,
