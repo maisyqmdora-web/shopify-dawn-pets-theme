@@ -12,10 +12,34 @@
     "image_banner": {
       "type": "image-banner",
       "blocks": {
+        "slide_bWNCzN": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/halloween-dog-with-jack-o-lantern.jpg",
+            "color_scheme": "scheme-3",
+            "heading": "Meals that keeptails <em>wagging</em>",
+            "heading_size": "h0",
+            "text": "Describe the slide content here.",
+            "button_label": "Shop Now",
+            "button_link": "",
+            "button_style_secondary": true,
+            "content_position": "middle-left",
+            "content_alignment": "",
+            "heading_font_size": 50,
+            "text_font_size": 30,
+            "heading_color": "#49654a",
+            "text_color": "#ffffff",
+            "heading_font_family": "",
+            "text_font_family": "",
+            "button_text_color": "",
+            "button_border_color": "",
+            "button_bg_color": ""
+          }
+        },
         "slide_1": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/f1c663e57d27ce743c240ea95a49c972.jpg",
+            "image": "shopify://shop_images/chubby-dog-dressed-as-bunny.jpg",
             "color_scheme": "scheme-3",
             "heading": "Find the Best for Your Beloved Pet",
             "heading_size": "h0",
@@ -23,14 +47,23 @@
             "button_label": "Shop Now",
             "button_link": "shopify://collections/all",
             "button_style_secondary": true,
-            "content_position": "top-right",
-            "content_alignment": "right"
+            "content_position": "middle-right",
+            "content_alignment": "right",
+            "heading_font_size": 50,
+            "text_font_size": 30,
+            "heading_color": "#568658",
+            "text_color": "#ffffff",
+            "heading_font_family": "",
+            "text_font_family": "",
+            "button_text_color": "",
+            "button_border_color": "",
+            "button_bg_color": ""
           }
         },
         "slide_2": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/9b61d8da62a24c0fb65487ad1a84f4d7.jpg",
+            "image": "shopify://shop_images/tabby-cat-lounging-around.jpg",
             "color_scheme": "scheme-3",
             "heading": "New Arrivals This Season",
             "heading_size": "h0",
@@ -38,29 +71,27 @@
             "button_label": "Explore",
             "button_link": "shopify://collections/all",
             "button_style_secondary": true,
-            "content_position": "middle-left",
-            "content_alignment": "left"
-          }
-        },
-        "slide_3": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/9721a690bf8c3936b54d15373e749f65.jpg",
-            "color_scheme": "scheme-3",
-            "heading": "Free Shipping Over $50",
-            "heading_size": "h0",
-            "text": "We deliver love to your doorstep. Shop now and save more.",
-            "button_label": "Learn More",
-            "button_link": "shopify://collections/all",
-            "button_style_secondary": true,
-            "content_position": "bottom-right",
-            "content_alignment": "right"
+            "content_position": "top-center",
+            "content_alignment": "left",
+            "heading_font_size": 50,
+            "text_font_size": 30,
+            "heading_color": "",
+            "text_color": "",
+            "heading_font_family": "",
+            "text_font_family": "",
+            "button_text_color": "",
+            "button_border_color": "",
+            "button_bg_color": ""
           }
         }
       },
-      "block_order": ["slide_1", "slide_2", "slide_3"],
+      "block_order": [
+        "slide_bWNCzN",
+        "slide_1",
+        "slide_2"
+      ],
       "settings": {
-        "image_overlay_opacity": 40,
+        "image_overlay_opacity": 0,
         "image_height": "large",
         "image_behavior": "none",
         "auto_rotate": false,
@@ -89,7 +120,10 @@
           }
         }
       },
-      "block_order": ["heading", "text"],
+      "block_order": [
+        "heading",
+        "text"
+      ],
       "settings": {
         "desktop_content_position": "center",
         "content_alignment": "center",
@@ -150,7 +184,11 @@
           }
         }
       },
-      "block_order": ["collection-0", "product", "collection-1"],
+      "block_order": [
+        "collection-0",
+        "product",
+        "collection-1"
+      ],
       "settings": {
         "heading": "Multimedia collage",
         "heading_size": "h2",
@@ -207,7 +245,11 @@
           }
         }
       },
-      "block_order": ["column1", "column2", "column3"],
+      "block_order": [
+        "column1",
+        "column2",
+        "column3"
+      ],
       "settings": {
         "title": "",
         "heading_size": "h1",

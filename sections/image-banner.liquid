@@ -123,6 +123,9 @@
         #Slide-{{ section.id }}-{{ forloop.index }} .banner__media::after {
           opacity: {{ section.settings.image_overlay_opacity | divided_by: 100.0 }};
         }
+        #Slide-{{ section.id }}-{{ forloop.index }} .banner__media img {
+          object-fit: {{ section.settings.image_fit }};
+        }
         {%- if block.settings.heading_font_size != blank and block.settings.heading_font_size > 0 -%}
           #Slide-{{ section.id }}-{{ forloop.index }} .banner__heading {
             font-size: {{ block.settings.heading_font_size }}px;
@@ -412,6 +415,22 @@
       ],
       "default": "large",
       "label": "t:sections.image-banner.settings.image_height.label"
+    },
+    {
+      "type": "select",
+      "id": "image_fit",
+      "options": [
+        {
+          "value": "cover",
+          "label": "Cover (fill, may crop)"
+        },
+        {
+          "value": "contain",
+          "label": "Contain (show full image)"
+        }
+      ],
+      "default": "cover",
+      "label": "Image fit"
     },
     {
       "type": "select",
