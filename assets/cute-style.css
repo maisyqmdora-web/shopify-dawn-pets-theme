@@ -90,11 +90,11 @@ html {
   .banner__buttons {
     flex-direction: column;
     gap: 1rem;
-    width: 100%;
+    width: auto;
   }
 
   .banner__buttons .button {
-    width: 100%;
+    width: auto;
     min-width: unset;
   }
 }

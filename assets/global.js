@@ -1080,12 +1080,46 @@ class SlideshowComponent extends SliderComponent {
       clone.id = cloneId;
       const styleEl = document.createElement("style");
       const origStyle = document.querySelector(`style:has([id="${origId}"])`);
+      const cloneStyleRules = [];
       // Copy the computed overlay opacity from the original slide's ::after
       const mediaEl = sourceSlide.querySelector(".banner__media");
       if (mediaEl) {
         const afterStyle = getComputedStyle(mediaEl, "::after");
-        styleEl.textContent = `#${cloneId} .banner__media::after { opacity: ${afterStyle.opacity}; }`;
+        cloneStyleRules.push(
+          `#${cloneId} .banner__media::after { opacity: ${afterStyle.opacity}; }`,
+        );
       }
+
+      // Preserve computed heading size on wrap clones to prevent size jump (e.g. slide 3 -> 1)
+      const headingEl = sourceSlide.querySelector(".banner__heading");
+      if (headingEl) {
+        const headingStyle = getComputedStyle(headingEl);
+        cloneStyleRules.push(
+          `#${cloneId} .banner__heading { font-size: ${headingStyle.fontSize} !important; }`,
+        );
+      }
+
+      // Keep text size consistent on wrap clones
+      const textParagraphEl = sourceSlide.querySelector(".banner__text p");
+      const textEl = sourceSlide.querySelector(".banner__text");
+      const textSizeSource = textParagraphEl || textEl;
+      if (textSizeSource) {
+        const textStyle = getComputedStyle(textSizeSource);
+        cloneStyleRules.push(
+          `#${cloneId} .banner__text, #${cloneId} .banner__text p { font-size: ${textStyle.fontSize} !important; }`,
+        );
+      }
+
+      // Keep button label size consistent on wrap clones
+      const buttonEl = sourceSlide.querySelector(".banner__buttons .button, .banner__buttons a");
+      if (buttonEl) {
+        const buttonStyle = getComputedStyle(buttonEl);
+        cloneStyleRules.push(
+          `#${cloneId} .banner__buttons .button, #${cloneId} .banner__buttons a { font-size: ${buttonStyle.fontSize} !important; }`,
+        );
+      }
+
+      styleEl.textContent = cloneStyleRules.join("\n");
       clone.appendChild(styleEl);
       return { clone, styleEl };
     };
@@ -1109,6 +1143,14 @@ class SlideshowComponent extends SliderComponent {
         this.slider.scrollTo({ left: 0, behavior: "instant" });
         this.slider.style.scrollSnapType = "";
         this._wrapping = false;
+        this.dispatchEvent(
+          new CustomEvent("slideChanged", {
+            detail: {
+              currentPage: this.currentPage,
+              currentElement: this.sliderItemsToShow[this.currentPage - 1],
+            },
+          }),
+        );
       };
       const onEnd = () => {
         clearTimeout(fallbackTimer);
@@ -1143,6 +1185,14 @@ class SlideshowComponent extends SliderComponent {
         });
         this.slider.style.scrollSnapType = "";
         this._wrapping = false;
+        this.dispatchEvent(
+          new CustomEvent("slideChanged", {
+            detail: {
+              currentPage: this.currentPage,
+              currentElement: this.sliderItemsToShow[this.currentPage - 1],
+            },
+          }),
+        );
       };
 
       requestAnimationFrame(() => {

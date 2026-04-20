@@ -123,14 +123,94 @@
         #Slide-{{ section.id }}-{{ forloop.index }} .banner__media::after {
           opacity: {{ section.settings.image_overlay_opacity | divided_by: 100.0 }};
         }
+        {%- liquid
+          assign heading_offset_x = block.settings.heading_offset_x | default: 50 | minus: 50
+          assign heading_offset_y = block.settings.heading_offset_y | default: 50 | minus: 50
+          assign text_offset_x = block.settings.text_offset_x | default: 50 | minus: 50
+          assign text_offset_y = block.settings.text_offset_y | default: 50 | minus: 50
+          assign button_offset_x = block.settings.button_offset_x | default: 50 | minus: 50
+          assign button_offset_y = block.settings.button_offset_y | default: 50 | minus: 50
+          assign heading_mobile_offset_x = block.settings.heading_mobile_offset_x | default: 50 | minus: 50
+          assign heading_mobile_offset_y = block.settings.heading_mobile_offset_y | default: 50 | minus: 50
+          assign text_mobile_offset_x = block.settings.text_mobile_offset_x | default: 50 | minus: 50
+          assign text_mobile_offset_y = block.settings.text_mobile_offset_y | default: 50 | minus: 50
+          assign button_mobile_offset_x = block.settings.button_mobile_offset_x | default: 50 | minus: 50
+          assign button_mobile_offset_y = block.settings.button_mobile_offset_y | default: 50 | minus: 50
+        -%}
+        #Slide-{{ section.id }}-{{ forloop.index }} .slideshow__text.banner__box {
+          display: flex;
+          flex-direction: column;
+        }
         {%- if block.settings.heading_font_size != blank and block.settings.heading_font_size > 0 -%}
+          {%- assign heading_mobile_size = block.settings.heading_font_size | times: 0.4 | round -%}
+          {%- assign heading_vw = block.settings.heading_font_size | times: 0.067 | round: 1 -%}
           #Slide-{{ section.id }}-{{ forloop.index }} .banner__heading {
-            font-size: {{ block.settings.heading_font_size }}px;
+            font-size: clamp({{ heading_mobile_size }}px, {{ heading_vw }}vw, {{ block.settings.heading_font_size }}px) !important;
           }
         {%- endif -%}
+          #Slide-{{ section.id }}-{{ forloop.index }} .banner__buttons .button:not(:hover):not(:focus-visible) {
+            background-color: transparent !important;
+          }
         {%- if block.settings.text_font_size != blank and block.settings.text_font_size > 0 -%}
+          {%- assign text_mobile_size = block.settings.text_font_size | times: 0.5 | round -%}
+          {%- assign text_vw = block.settings.text_font_size | times: 0.067 | round: 1 -%}
           #Slide-{{ section.id }}-{{ forloop.index }} .banner__text p {
-            font-size: {{ block.settings.text_font_size }}px;
+            font-size: clamp({{ text_mobile_size }}px, {{ text_vw }}vw, {{ block.settings.text_font_size }}px) !important;
+          }
+        {%- endif -%}
+        {%- if block.settings.button_font_size != blank and block.settings.button_font_size > 0 -%}
+          {%- assign button_mobile_size = block.settings.button_font_size | times: 0.4
+             | round -%}
+          {%- assign button_vw = block.settings.button_font_size | times: 0.067 | round: 1 -%}
+          #Slide-{{ section.id }}-{{ forloop.index }} .banner__buttons .button {
+            font-size: clamp({{ button_mobile_size }}px, {{ button_vw }}vw, {{ block.settings.button_font_size }}px) !important;
+          }
+        {%- endif -%}
+
+        {%- if heading_offset_x != 0 or heading_offset_y != 0 -%}
+          #Slide-{{ section.id }}-{{ forloop.index }} .banner__heading {
+            position: relative;
+            left: {{ heading_offset_x }}vw;
+            top: {{ heading_offset_y }}vh;
+          }
+        {%- endif -%}
+        {%- if text_offset_x != 0 or text_offset_y != 0 -%}
+          #Slide-{{ section.id }}-{{ forloop.index }} .banner__text {
+            position: relative;
+            left: {{ text_offset_x }}vw;
+            top: {{ text_offset_y }}vh;
+          }
+        {%- endif -%}
+        {%- if button_offset_x != 0 or button_offset_y != 0 -%}
+          #Slide-{{ section.id }}-{{ forloop.index }} .banner__buttons {
+            position: relative;
+            left: {{ button_offset_x }}vw;
+            top: {{ button_offset_y }}vh;
+          }
+        {%- endif -%}
+        {%- if block.settings.enable_mobile_position_adjustments -%}
+          @media screen and (max-width: 749px) {
+            {%- if heading_mobile_offset_x != 0 or heading_mobile_offset_y != 0 -%}
+              #Slide-{{ section.id }}-{{ forloop.index }} .banner__heading {
+                position: relative;
+                left: {{ heading_mobile_offset_x }}vw;
+                top: {{ heading_mobile_offset_y }}vh;
+              }
+            {%- endif -%}
+            {%- if text_mobile_offset_x != 0 or text_mobile_offset_y != 0 -%}
+              #Slide-{{ section.id }}-{{ forloop.index }} .banner__text {
+                position: relative;
+                left: {{ text_mobile_offset_x }}vw;
+                top: {{ text_mobile_offset_y }}vh;
+              }
+            {%- endif -%}
+            {%- if button_mobile_offset_x != 0 or button_mobile_offset_y != 0 -%}
+              #Slide-{{ section.id }}-{{ forloop.index }} .banner__buttons {
+                position: relative;
+                left: {{ button_mobile_offset_x }}vw;
+                top: {{ button_mobile_offset_y }}vh;
+              }
+            {%- endif -%}
           }
         {%- endif -%}
         {%- if block.settings.heading_color != blank -%}
@@ -182,17 +262,79 @@
         {%- endif -%}
         {%- if block.settings.button_text_color != blank -%}
           #Slide-{{ section.id }}-{{ forloop.index }} .banner__buttons .button {
-            color: {{ block.settings.button_text_color }};
+            --color-button-text: {{ block.settings.button_text_color | color_extract: 'red' }}, {{ block.settings.button_text_color | color_extract: 'green' }}, {{ block.settings.button_text_color | color_extract: 'blue' }};
+            color: rgb(var(--color-button-text));
+            -webkit-text-fill-color: rgb(var(--color-button-text));
           }
-        {%- endif -%}
-        {%- if block.settings.button_border_color != blank -%}
-          #Slide-{{ section.id }}-{{ forloop.index }} .banner__buttons .button {
-            border-color: {{ block.settings.button_border_color }};
+          #Slide-{{ section.id }}-{{ forloop.index }} .banner__buttons .button:hover,
+          #Slide-{{ section.id }}-{{ forloop.index }} .banner__buttons .button:focus-visible {
+            color: rgb(var(--color-button-text));
+            -webkit-text-fill-color: rgb(var(--color-button-text));
           }
         {%- endif -%}
         {%- if block.settings.button_bg_color != blank -%}
           #Slide-{{ section.id }}-{{ forloop.index }} .banner__buttons .button {
-            background-color: {{ block.settings.button_bg_color }};
+            --color-button: {{ block.settings.button_bg_color | color_extract: 'red' }}, {{ block.settings.button_bg_color | color_extract: 'green' }}, {{ block.settings.button_bg_color | color_extract: 'blue' }};
+            --alpha-button-background: 1;
+            background-color: rgba(var(--color-button), var(--alpha-button-background));
+          }
+        {%- endif -%}
+        {%- if block.settings.button_hover_bg_color != blank -%}
+          #Slide-{{ section.id }}-{{ forloop.index }} .banner__buttons .button {
+            --banner-button-hover-bg-color: {{ block.settings.button_hover_bg_color | color_extract: 'red' }}, {{ block.settings.button_hover_bg_color | color_extract: 'green' }}, {{ block.settings.button_hover_bg_color | color_extract: 'blue' }};
+          }
+          #Slide-{{ section.id }}-{{ forloop.index }} .banner__buttons .button:hover,
+          #Slide-{{ section.id }}-{{ forloop.index }} .banner__buttons .button:focus-visible {
+            background-color: rgba(var(--banner-button-hover-bg-color), 1);
+            filter: none;
+          }
+        {%- elsif block.settings.button_bg_color != blank -%}
+          #Slide-{{ section.id }}-{{ forloop.index }} .banner__buttons .button:hover,
+          #Slide-{{ section.id }}-{{ forloop.index }} .banner__buttons .button:focus-visible {
+            background-color: rgba(var(--color-button), var(--alpha-button-background));
+            filter: none;
+          }
+        {%- endif -%}
+        {%- if block.settings.button_border_color != blank -%}
+          #Slide-{{ section.id }}-{{ forloop.index }} .banner__buttons .button {
+            --banner-button-border-color: {{ block.settings.button_border_color | color_extract: 'red' }}, {{ block.settings.button_border_color | color_extract: 'green' }}, {{ block.settings.button_border_color | color_extract: 'blue' }};
+            --banner-button-border-opacity: 1;
+          }
+          #Slide-{{ section.id }}-{{ forloop.index }} .banner__buttons .button::after {
+            box-shadow: 0 0 0 calc(var(--buttons-border-width) + var(--border-offset))
+                rgba(var(--banner-button-border-color), var(--banner-button-border-opacity)),
+              0 0 0 var(--buttons-border-width) rgba(var(--color-button), var(--alpha-button-background));
+          }
+          #Slide-{{ section.id }}-{{ forloop.index }} .banner__buttons .button:not([disabled]):hover::after {
+            box-shadow: 0 0 0 calc(var(--buttons-border-width) + 1.3px)
+                rgba(var(--banner-button-border-color), var(--banner-button-border-opacity)),
+              0 0 0 calc(var(--buttons-border-width) + 1px) rgba(var(--color-button), var(--alpha-button-background));
+          }
+        {%- endif -%}
+        {%- if block.settings.button_link == blank -%}
+          #Slide-{{ section.id }}-{{ forloop.index }} .banner__buttons .button[aria-disabled='true'] {
+            opacity: 0.5;
+          }
+        {%- endif -%}
+        {%- if block.settings.button_lock_exact_color_on_hover -%}
+          #Slide-{{ section.id }}-{{ forloop.index }} .banner__buttons .button,
+          #Slide-{{ section.id }}-{{ forloop.index }} .banner__buttons .button:hover,
+          #Slide-{{ section.id }}-{{ forloop.index }} .banner__buttons .button:focus-visible {
+            color: rgb(var(--color-button-text)) !important;
+            -webkit-text-fill-color: rgb(var(--color-button-text)) !important;
+            background-color: rgba(var(--color-button), var(--alpha-button-background)) !important;
+            filter: none !important;
+            opacity: 1 !important;
+            text-shadow: none !important;
+            transform: none !important;
+            box-shadow: none !important;
+            animation: none !important;
+          }
+          #Slide-{{ section.id }}-{{ forloop.index }} .banner__buttons .button::after,
+          #Slide-{{ section.id }}-{{ forloop.index }} .banner__buttons .button:hover::after,
+          #Slide-{{ section.id }}-{{ forloop.index }} .banner__buttons .button:focus-visible::after {
+            border: var(--buttons-border-width) solid rgb(var(--banner-button-border-color, var(--color-button-text)));
+            box-shadow: none !important;
           }
         {%- endif -%}
       </style>
@@ -269,21 +411,13 @@
         {%- endif -%}
 
         {%- liquid
-          if block.settings.content_position != blank
-            assign slide_position = block.settings.content_position
-          else
-            assign slide_position = section.settings.desktop_content_position
-          endif
-          if block.settings.content_alignment != blank
-            assign slide_alignment = block.settings.content_alignment
-          else
-            assign slide_alignment = section.settings.desktop_content_alignment
-          endif
+          assign slide_position = section.settings.desktop_content_position
+          assign slide_alignment = section.settings.desktop_content_alignment
         -%}
         <div class="slideshow__text-wrapper banner__content banner__content--{{ slide_position }} page-width{% if section.settings.show_text_box == false %} banner--desktop-transparent{% endif %}{% if settings.animations_reveal_on_scroll and forloop.index == 1 %} scroll-trigger animate--slide-in{% endif %}">
           <div class="slideshow__text banner__box content-container content-container--full-width-mobile color-{{ block.settings.color_scheme }} gradient banner--content-align-{{ slide_alignment }} banner--content-align-mobile-{{ section.settings.mobile_content_alignment }}">
             {%- if block.settings.heading != blank -%}
-              <h2 class="banner__heading banner__heading--artistic inline-richtext {{ block.settings.heading_size }}">
+              <h2 class="banner__heading banner__heading--artistic inline-richtext h0">
                 {{ block.settings.heading }}
               </h2>
             {%- endif -%}
@@ -316,23 +450,111 @@
 </slideshow-component>
 {%- endif -%}
 
+<style>
+  @media screen and (max-width: 749px) {
+    /* Force overlay mode: image fills entire banner, text on top */
+    .slideshow.banner.banner--mobile-bottom {
+      flex-wrap: nowrap !important;
+    }
+
+    .slideshow.banner.banner--mobile-bottom .slideshow__slide {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .slideshow.banner.banner--mobile-bottom .banner__media {
+      position: absolute !important;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100% !important;
+    }
+
+    .slideshow.banner.banner--mobile-bottom .banner__media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .slideshow.banner.banner--mobile-bottom .slideshow__text-wrapper {
+      position: relative;
+      z-index: 2;
+      min-height: 39rem;
+      display: flex;
+      align-items: flex-end;
+      padding-bottom: 2rem;
+    }
+
+    .slideshow.banner.banner--mobile-bottom .slideshow__text.banner__box {
+      background: transparent;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      border: 0;
+      box-shadow: none;
+      border-radius: 0;
+      margin: 0;
+      padding: 2rem 1.5rem;
+    }
+
+    .slideshow.banner.banner--mobile-bottom .slideshow__text.banner__box::after {
+      display: none;
+    }
+
+    /* Scale button for mobile */
+    .slideshow.banner .banner__buttons a {
+      font-size: clamp(1.5rem, 3.8vw, 2.5rem) !important;
+      padding: 1rem 2rem;
+    }
+    .slideshow.banner .banner__buttons a::after {
+      box-shadow: 0 0 0 1px
+        rgba(var(--banner-button-border-color, var(--color-button)), var(--banner-button-border-opacity, var(--alpha-button-background)));
+    }
+  }
+</style>
+
 <script>
+
   // Banner content fly-in — replay every time banner scrolls into view
   (function() {
     var flySelector = '.banner__heading--artistic, .banner__text--artistic, .banner__buttons';
 
-    function resetContent(container) {
-      container.querySelectorAll(flySelector).forEach(function(el) {
+    function resetElements(root) {
+      if (!root) return;
+      root.querySelectorAll(flySelector).forEach(function(el) {
         el.classList.remove('banner-fly-in');
       });
     }
 
-    function playContent(container) {
-      var items = container.querySelectorAll(flySelector);
+    function playElements(root) {
+      if (!root) return;
+      var items = root.querySelectorAll(flySelector);
       items.forEach(function(el, i) {
-        el.style.animationDelay = (i * 0.12) + 's';
+        if (el.classList.contains('banner-fly-in')) return;
+        el.style.animationDelay = (i * 0.06) + 's';
         el.classList.add('banner-fly-in');
       });
+    }
+
+    function getAllSlides(container) {
+      return container.querySelectorAll('.slideshow__slide');
+    }
+
+    function getDefaultSlide(container) {
+      return container.querySelector('.slideshow__slide');
+    }
+
+    function resolvePlayableSlide(container, slide) {
+      if (!slide) return null;
+      if (!slide.classList.contains('slideshow__clone')) return slide;
+
+      var cloneId = slide.id || '';
+      var sourceId = cloneId.replace(/-clone$/, '');
+      if (!sourceId) return getDefaultSlide(container);
+
+      var sourceSlide = document.getElementById(sourceId);
+      if (sourceSlide && container.contains(sourceSlide)) return sourceSlide;
+      return getDefaultSlide(container);
     }
 
     function init() {
@@ -342,9 +564,9 @@
       var observer = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
           if (entry.isIntersecting) {
-            playContent(entry.target);
+            playElements(getDefaultSlide(entry.target));
           } else {
-            resetContent(entry.target);
+            resetElements(entry.target);
           }
         });
       }, { threshold: 0.15 });
@@ -352,8 +574,16 @@
       containers.forEach(function(c) { observer.observe(c); });
 
       containers.forEach(function(comp) {
-        comp.addEventListener('slideChanged', function() {
-          setTimeout(function() { playContent(comp); }, 50);
+        comp.addEventListener('slideChanged', function(event) {
+          var rawCurrentSlide = event.detail && event.detail.currentElement;
+          var currentSlide = resolvePlayableSlide(comp, rawCurrentSlide);
+          if (!currentSlide) return;
+
+          getAllSlides(comp).forEach(function(slide) {
+            if (slide !== currentSlide) resetElements(slide);
+          });
+
+          setTimeout(function() { playElements(currentSlide); }, 50);
         });
       });
     }
@@ -560,6 +790,10 @@
       "id": "show_text_below",
       "default": false,
       "label": "t:sections.image-banner.settings.show_text_below.label"
+    },
+    {
+      "type": "paragraph",
+      "content": "Use each slide's own Element position (per slide) settings for heading/text/button offsets."
     }
   ],
   "blocks": [
@@ -585,30 +819,6 @@
           "label": "t:sections.image-banner.blocks.heading.settings.heading.label"
         },
         {
-          "type": "select",
-          "id": "heading_size",
-          "options": [
-            {
-              "value": "h2",
-              "label": "t:sections.all.heading_size.options__1.label"
-            },
-            {
-              "value": "h1",
-              "label": "t:sections.all.heading_size.options__2.label"
-            },
-            {
-              "value": "h0",
-              "label": "t:sections.all.heading_size.options__3.label"
-            },
-            {
-              "value": "hxl",
-              "label": "t:sections.all.heading_size.options__4.label"
-            }
-          ],
-          "default": "h0",
-          "label": "t:sections.all.heading_size.label"
-        },
-        {
           "type": "inline_richtext",
           "id": "text",
           "default": "Describe the slide content here.",
@@ -632,36 +842,6 @@
           "label": "Use outline button style"
         },
         {
-          "type": "select",
-          "id": "content_position",
-          "options": [
-            { "value": "", "label": "Inherit from section" },
-            { "value": "top-left", "label": "Top left" },
-            { "value": "top-center", "label": "Top center" },
-            { "value": "top-right", "label": "Top right" },
-            { "value": "middle-left", "label": "Middle left" },
-            { "value": "middle-center", "label": "Middle center" },
-            { "value": "middle-right", "label": "Middle right" },
-            { "value": "bottom-left", "label": "Bottom left" },
-            { "value": "bottom-center", "label": "Bottom center" },
-            { "value": "bottom-right", "label": "Bottom right" }
-          ],
-          "default": "",
-          "label": "Content position (per slide)"
-        },
-        {
-          "type": "select",
-          "id": "content_alignment",
-          "options": [
-            { "value": "", "label": "Inherit from section" },
-            { "value": "left", "label": "Left" },
-            { "value": "center", "label": "Center" },
-            { "value": "right", "label": "Right" }
-          ],
-          "default": "",
-          "label": "Content alignment (per slide)"
-        },
-        {
           "type": "range",
           "id": "heading_font_size",
           "min": 0,
@@ -680,6 +860,134 @@
           "unit": "px",
           "default": 0,
           "label": "Text font size (0 = default)"
+        },
+        {
+          "type": "range",
+          "id": "button_font_size",
+          "min": 0,
+          "max": 48,
+          "step": 1,
+          "unit": "px",
+          "default": 0,
+          "label": "Button font size (0 = default)"
+        },
+        {
+          "type": "header",
+          "content": "Element position (per slide)"
+        },
+        {
+          "type": "range",
+          "id": "heading_offset_x",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "default": 50,
+          "label": "Heading horizontal position (desktop)"
+        },
+        {
+          "type": "range",
+          "id": "heading_offset_y",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "default": 50,
+          "label": "Heading vertical position (desktop)"
+        },
+        {
+          "type": "range",
+          "id": "text_offset_x",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "default": 50,
+          "label": "Text horizontal position (desktop)"
+        },
+        {
+          "type": "range",
+          "id": "text_offset_y",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "default": 50,
+          "label": "Text vertical position (desktop)"
+        },
+        {
+          "type": "range",
+          "id": "button_offset_x",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "default": 50,
+          "label": "Button horizontal position (desktop)"
+        },
+        {
+          "type": "range",
+          "id": "button_offset_y",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "default": 50,
+          "label": "Button vertical position (desktop)"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_mobile_position_adjustments",
+          "default": false,
+          "label": "Use separate mobile position tweaks"
+        },
+        {
+          "type": "range",
+          "id": "heading_mobile_offset_x",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "default": 50,
+          "label": "Heading horizontal position (mobile)"
+        },
+        {
+          "type": "range",
+          "id": "heading_mobile_offset_y",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "default": 50,
+          "label": "Heading vertical position (mobile)"
+        },
+        {
+          "type": "range",
+          "id": "text_mobile_offset_x",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "default": 50,
+          "label": "Text horizontal position (mobile)"
+        },
+        {
+          "type": "range",
+          "id": "text_mobile_offset_y",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "default": 50,
+          "label": "Text vertical position (mobile)"
+        },
+        {
+          "type": "range",
+          "id": "button_mobile_offset_x",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "default": 50,
+          "label": "Button horizontal position (mobile)"
+        },
+        {
+          "type": "range",
+          "id": "button_mobile_offset_y",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "default": 50,
+          "label": "Button vertical position (mobile)"
         },
         {
           "type": "header",
@@ -739,6 +1047,17 @@
           "type": "color",
           "id": "button_bg_color",
           "label": "Button background color"
+        },
+        {
+          "type": "color",
+          "id": "button_hover_bg_color",
+          "label": "Button hover background color"
+        },
+        {
+          "type": "checkbox",
+          "id": "button_lock_exact_color_on_hover",
+          "default": false,
+          "label": "Keep exact button colors on hover"
         }
       ]
     }

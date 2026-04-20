@@ -1,0 +1,27 @@
+#!/bin/sh
+set -eu
+
+DOC_PATH="THEME_FEATURES_CN.md"
+SECTION_TITLE="## 10. 功能更新日志"
+AUTO_PREFIX="自动记录：本次提交包含主题代码更新，请补充客户可见功能描述。"
+
+if [ ! -f "$DOC_PATH" ]; then
+  exit 0
+fi
+
+STAGED_FILES="$(git diff --cached --name-only)"
+if [ -z "$STAGED_FILES" ]; then
+  exit 0
+fi
+
+if echo "$STAGED_FILES" | grep -Eq '^(assets|sections|snippets|layout|templates|config)/'; then
+  if ! echo "$STAGED_FILES" | grep -Fxq "$DOC_PATH"; then
+    if grep -Fq "$SECTION_TITLE" "$DOC_PATH"; then
+      TODAY="$(date +%Y-%m-%d)"
+      ENTRY="- ${TODAY}：${AUTO_PREFIX}"
+      printf "\n%s\n" "$ENTRY" >> "$DOC_PATH"
+      git add "$DOC_PATH"
+      echo "已自动追加文档更新日志: $ENTRY"
+    fi
+  fi
+fi

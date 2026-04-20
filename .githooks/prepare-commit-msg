@@ -1,0 +1,9 @@
+#!/bin/sh
+set -eu
+
+MSG_FILE="$1"
+NOTE_LINE="Doc-Note: 已检查 THEME_FEATURES_CN.md（若本次新增功能，已同步更新文档）"
+
+if [ -f "$MSG_FILE" ] && ! grep -Fq "$NOTE_LINE" "$MSG_FILE"; then
+  printf "\n%s\n" "$NOTE_LINE" >> "$MSG_FILE"
+fi
