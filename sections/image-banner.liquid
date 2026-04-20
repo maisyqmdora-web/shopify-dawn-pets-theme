@@ -523,8 +523,6 @@
       if (!root) return;
       root.querySelectorAll(flySelector).forEach(function(el) {
         el.classList.remove('banner-fly-in');
-        // Force reflow so animation can restart when class is re-added
-        void el.offsetWidth;
       });
     }
 
@@ -534,19 +532,16 @@
       items.forEach(function(el, i) {
         if (el.classList.contains('banner-fly-in')) return;
         el.style.animationDelay = (i * 0.06) + 's';
-        void el.offsetWidth; // ensure reflow before adding class
         el.classList.add('banner-fly-in');
       });
     }
 
     function getAllSlides(container) {
-      return container.querySelectorAll('.slideshow__slide:not(.slideshow__clone)');
+      return container.querySelectorAll('.slideshow__slide');
     }
 
-    function getActiveSlide(container) {
-      var slides = container.querySelectorAll('.slideshow__slide:not(.slideshow__clone)');
-      var page = container.currentPage || 1;
-      return slides[page - 1] || slides[0];
+    function getDefaultSlide(container) {
+      return container.querySelector('.slideshow__slide');
     }
 
     function resolvePlayableSlide(container, slide) {
@@ -555,11 +550,11 @@
 
       var cloneId = slide.id || '';
       var sourceId = cloneId.replace(/-clone$/, '');
-      if (!sourceId) return getActiveSlide(container);
+      if (!sourceId) return getDefaultSlide(container);
 
       var sourceSlide = document.getElementById(sourceId);
       if (sourceSlide && container.contains(sourceSlide)) return sourceSlide;
-      return getActiveSlide(container);
+      return getDefaultSlide(container);
     }
 
     function init() {
@@ -568,15 +563,10 @@
 
       var observer = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
-          var comp = entry.target;
           if (entry.isIntersecting) {
-            var active = getActiveSlide(comp);
-            playElements(active);
+            playElements(getDefaultSlide(entry.target));
           } else {
-            // Reset ALL slides so elements go back to opacity:0
-            getAllSlides(comp).forEach(function(slide) {
-              resetElements(slide);
-            });
+            resetElements(entry.target);
           }
         });
       }, { threshold: 0.15 });
