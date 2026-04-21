@@ -523,6 +523,8 @@
       if (!root) return;
       root.querySelectorAll(flySelector).forEach(function(el) {
         el.classList.remove('banner-fly-in');
+        el.style.animationDelay = '';
+        void el.offsetWidth; // force reflow so opacity:0 base state is applied
       });
     }
 
@@ -530,31 +532,32 @@
       if (!root) return;
       var items = root.querySelectorAll(flySelector);
       items.forEach(function(el, i) {
-        if (el.classList.contains('banner-fly-in')) return;
+        el.classList.remove('banner-fly-in');
+        void el.offsetWidth; // force reflow before re-adding class
         el.style.animationDelay = (i * 0.06) + 's';
         el.classList.add('banner-fly-in');
       });
     }
 
-    function getAllSlides(container) {
-      return container.querySelectorAll('.slideshow__slide');
-    }
-
-    function getDefaultSlide(container) {
-      return container.querySelector('.slideshow__slide');
+    function getActiveSlide(container) {
+      // Try to find the currently visible (non-clone) slide
+      var page = (container.currentPage || 1);
+      var nonClones = Array.prototype.slice.call(
+        container.querySelectorAll('.slideshow__slide:not(.slideshow__clone)')
+      );
+      return nonClones[page - 1] || nonClones[0];
     }
 
     function resolvePlayableSlide(container, slide) {
-      if (!slide) return null;
+      if (!slide) return getActiveSlide(container);
       if (!slide.classList.contains('slideshow__clone')) return slide;
-
       var cloneId = slide.id || '';
       var sourceId = cloneId.replace(/-clone$/, '');
-      if (!sourceId) return getDefaultSlide(container);
-
-      var sourceSlide = document.getElementById(sourceId);
-      if (sourceSlide && container.contains(sourceSlide)) return sourceSlide;
-      return getDefaultSlide(container);
+      if (sourceId) {
+        var sourceSlide = document.getElementById(sourceId);
+        if (sourceSlide && container.contains(sourceSlide)) return sourceSlide;
+      }
+      return getActiveSlide(container);
     }
 
     function init() {
@@ -563,10 +566,16 @@
 
       var observer = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
+          var comp = entry.target;
+          // Reset ALL slides first
+          comp.querySelectorAll('.slideshow__slide:not(.slideshow__clone)').forEach(function(s) {
+            resetElements(s);
+          });
           if (entry.isIntersecting) {
-            playElements(getDefaultSlide(entry.target));
-          } else {
-            resetElements(entry.target);
+            // Small delay to let reset fully apply, then play active slide
+            setTimeout(function() {
+              playElements(getActiveSlide(comp));
+            }, 30);
           }
         });
       }, { threshold: 0.15 });
@@ -579,8 +588,8 @@
           var currentSlide = resolvePlayableSlide(comp, rawCurrentSlide);
           if (!currentSlide) return;
 
-          getAllSlides(comp).forEach(function(slide) {
-            if (slide !== currentSlide) resetElements(slide);
+          comp.querySelectorAll('.slideshow__slide:not(.slideshow__clone)').forEach(function(s) {
+            if (s !== currentSlide) resetElements(s);
           });
 
           setTimeout(function() { playElements(currentSlide); }, 50);
