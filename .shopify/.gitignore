@@ -1,5 +1,0 @@
-# Ignore Shopify local CLI files
-.shopify/
-
-# Ignore Shopify theme settings (user data)
-config/settings_data.json

@@ -1,0 +1,8 @@
+# Shopify CLI local files
+.shopify/
+
+# Shopify theme settings (不要提交用户配置)
+config/settings_data.json
+
+# Mac 系统文件
+.DS_Store
