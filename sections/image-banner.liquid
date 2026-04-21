@@ -168,24 +168,30 @@
         {%- endif -%}
 
         {%- if heading_offset_x != 0 or heading_offset_y != 0 -%}
-          #Slide-{{ section.id }}-{{ forloop.index }} .banner__heading {
-            position: relative;
-            left: {{ heading_offset_x }}vw;
-            top: {{ heading_offset_y }}vh;
+          @media screen and (min-width: 750px) {
+            #Slide-{{ section.id }}-{{ forloop.index }} .banner__heading {
+              position: relative;
+              left: {{ heading_offset_x }}vw;
+              top: {{ heading_offset_y }}vh;
+            }
           }
         {%- endif -%}
         {%- if text_offset_x != 0 or text_offset_y != 0 -%}
-          #Slide-{{ section.id }}-{{ forloop.index }} .banner__text {
-            position: relative;
-            left: {{ text_offset_x }}vw;
-            top: {{ text_offset_y }}vh;
+          @media screen and (min-width: 750px) {
+            #Slide-{{ section.id }}-{{ forloop.index }} .banner__text {
+              position: relative;
+              left: {{ text_offset_x }}vw;
+              top: {{ text_offset_y }}vh;
+            }
           }
         {%- endif -%}
         {%- if button_offset_x != 0 or button_offset_y != 0 -%}
-          #Slide-{{ section.id }}-{{ forloop.index }} .banner__buttons {
-            position: relative;
-            left: {{ button_offset_x }}vw;
-            top: {{ button_offset_y }}vh;
+          @media screen and (min-width: 750px) {
+            #Slide-{{ section.id }}-{{ forloop.index }} .banner__buttons {
+              position: relative;
+              left: {{ button_offset_x }}vw;
+              top: {{ button_offset_y }}vh;
+            }
           }
         {%- endif -%}
         {%- if block.settings.enable_mobile_position_adjustments -%}

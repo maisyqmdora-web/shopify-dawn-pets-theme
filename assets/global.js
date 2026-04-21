@@ -969,6 +969,33 @@ class SlideshowComponent extends SliderComponent {
 
     if (!this.slider || !this.nextButton) return;
 
+    // Mouse drag to slide
+    this._dragStartX = null;
+    this._isDragging = false;
+    this.slider.addEventListener("mousedown", (e) => {
+      this._dragStartX = e.clientX;
+      this._isDragging = false;
+    });
+    this.slider.addEventListener("mousemove", (e) => {
+      if (this._dragStartX === null) return;
+      if (Math.abs(e.clientX - this._dragStartX) > 5) this._isDragging = true;
+    });
+    this.slider.addEventListener("mouseup", (e) => {
+      if (this._dragStartX === null) return;
+      const diff = e.clientX - this._dragStartX;
+      this._dragStartX = null;
+      if (!this._isDragging) return;
+      this._isDragging = false;
+      if (diff < -40) this.nextButton.click();
+      else if (diff > 40) this.prevButton.click();
+    });
+    this.slider.addEventListener("mouseleave", () => {
+      this._dragStartX = null;
+      this._isDragging = false;
+    });
+    // Prevent accidental link/image drag
+    this.slider.addEventListener("dragstart", (e) => e.preventDefault());
+
     this.sliderFirstItemNode = this.slider.querySelector(".slideshow__slide");
     if (this.sliderItemsToShow.length > 0) this.currentPage = 1;
 
